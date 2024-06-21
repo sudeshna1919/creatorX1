@@ -1,0 +1,43 @@
+name: BDD Cucumber CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('CreatoXdoc/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Dependencies
+        run: mvn install -DskipTests
+        working-directory: CreatoXdoc
+
+      - name: Run Tests
+        run: mvn test
+        working-directory: CreatoXdoc
+        
+      - name: Display Test Results
+        if: always()  # Always display the output, even if previous steps failed
+        run: |
+          echo "Maven build and test output:"
+          ls -R CreatoXdoc/target  # List files in target directory for debugging
