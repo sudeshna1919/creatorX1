@@ -56,6 +56,14 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+
+		   <includes>
+            		<include>DocTestRunner.java</include>
+            		<include>BasePage.java</include>
+            		<include>DocStepDefinitions.java</include>
+			<include>DocPage.java</include>
+			
+          	</includes>
                 </configuration>
             </plugin>
             <!-- Other plugins -->
